@@ -9,9 +9,14 @@ let decimal = document.querySelector('.decimal');
 let currentValue = ''
 let previousValue = ''
 let operator = ''
+let resultDisplayed = false;
 
 numbers.forEach((number) => {
     number.addEventListener('click', (e) => {
+        if(resultDisplayed) {
+            currentValue = '';
+            resultDisplayed= false;
+        }
         handleNumber(e.target.textContent)  
         currentDisplay.textContent= currentValue
     });
@@ -19,14 +24,7 @@ numbers.forEach((number) => {
 
 operators.forEach((op) => op.addEventListener("click", function(e){
     handleOperator(e.target.textContent)
-    if(!opInput) {
-        previousDisplay.textContent = previousValue + " " + operator;
-        currentDisplay.textContent = currentValue;
-    }else {
-        currentDisplay.textContent = Number(previousDisplay) + Number(currentDisplay)
-    }
- 
-    
+        //currentDisplay        .textContent = currentValue;
 }))
 
 
@@ -37,9 +35,18 @@ function handleNumber(num){
 }
 
 function handleOperator(op){
-    operator =op;
-    previousValue = currentValue;
-    currentValue = '';
+    if (previousValue !== '' && currentValue !== '') {
+        calculate();
+        operator = op;
+        previousDisplay.textContent = previousValue + ' ' + operator;
+        currentDisplay.textContent = '';
+        resultDisplayed = true;
+    } else if (currentValue !== '') {
+        operator = op;
+        previousValue = currentValue;
+        currentValue = '';
+        previousDisplay.textContent = previousValue + ' ' + operator;
+    }
 }
 
 clear.addEventListener("click", function(){
@@ -48,7 +55,12 @@ clear.addEventListener("click", function(){
     operator = '';
     previousDisplay.textContent = currentValue;
     currentDisplay.textContent = currentValue;
+    resultDisplayed =false;
 })
+decimal.addEventListener("click", function(){
+    addDecimal();
+})
+
 
 function calculate() {
     currentValue = Number(currentValue);
@@ -64,17 +76,23 @@ function calculate() {
         previousValue /= currentValue;
     }
     previousValue = previousValue.toString();
-    currentValue = previousValue.toString();
+    currentValue = ''
 }
 
 equals.addEventListener("click", function(){
     if(currentValue != '' && previousValue != ''){
         calculate()
         previousDisplay.textContent = '';
-        if(previousValue.length <= 5){
-            currentDisplay.textContent = previousValue;
-        } else{
-            currentDisplay.textContent = previousValue.slice(0,5) + "...";
-        }
+     currentDisplay.textContent = previousValue;
+     currentValue = previousValue;
+     previousValue = '';
+     operator = ''
+     resultDisplayed= true
     }
 })
+
+function addDecimal(){
+    if(!currentValue.includes(".")){
+        currentValue += '.';
+    }
+}
