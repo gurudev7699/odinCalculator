@@ -5,6 +5,9 @@ let equals = document.querySelector('.equal');
 let numbers = document.querySelectorAll('.number');
 let operators = document.querySelectorAll('.operator');
 let decimal = document.querySelector('.decimal');
+let backspace = document.querySelector('#backspace');
+let negate = document.querySelector('#negate');
+let percentage = document.querySelector('#percentile');
 
 let currentValue = ''
 let previousValue = ''
@@ -24,8 +27,25 @@ numbers.forEach((number) => {
 
 operators.forEach((op) => op.addEventListener("click", function(e){
     handleOperator(e.target.textContent)
-        //currentDisplay        .textContent = currentValue;
 }))
+
+backspace.addEventListener('click', function() {
+
+    if (currentValue !== '') {
+        currentValue = currentValue.slice(0, -1);
+        currentDisplay.textContent = currentValue;
+    }
+})
+
+negate.addEventListener('click', function() {
+    if (currentValue.startsWith('-')) {
+        currentValue = currentValue.slice(1);
+    } else {
+        currentValue = '-' + currentValue;
+    }
+    currentDisplay.textContent = currentValue;
+});
+
 
 
 function handleNumber(num){
@@ -72,8 +92,10 @@ function calculate() {
         previousValue -= currentValue;
     } else if(operator === "x"){
         previousValue *= currentValue;
-    } else{
+    } else if( operator === "/") {
         previousValue /= currentValue;
+    }else {
+        previousValue = (previousValue * currentValue)/100
     }
     previousValue = previousValue.toString();
     currentValue = ''

@@ -53,17 +53,17 @@
     background-color: plum;
 }
 
-#clear-btn{
+#clear-btn, #negate, #backspace, #percentile{
     border: 1px solid violet;
     border-radius: 10px;
 }
 
-#clear-btn:hover{
+#clear-btn:hover , #negate:hover, #backspace:hover, #percentile:hover{
     background-color: palevioletred
 }
 
 #screen {
-    width: 300px;
+    width: 400px;
     height: 75px;
     border: 1px solid salmon;
     border-radius: 10px;
